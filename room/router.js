@@ -1,6 +1,6 @@
-const express = require("express");
+//const express = require("express");
 const Room = require("./model");
-const { Router } = express;
+const { Router } = require("express");
 
 function roomFactory(stream) {
   const router = new Router();
@@ -15,4 +15,12 @@ function roomFactory(stream) {
   return router;
 }
 
-module.exports = roomFactory;
+const routerFetchRoom = new Router();
+
+routerFetchRoom.get("/", (req, res, next) => {
+  Room.findAll()
+    .then(room => res.json(room))
+    .catch(next);
+});
+
+module.exports = { roomFactory, routerFetchRoom };
