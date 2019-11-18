@@ -11,6 +11,18 @@ const cors = require("cors");
 const corsMiddleware = cors();
 app.use(corsMiddleware);
 
+const Sse = require("json-sse");
+
+//make only a stream ONE time, and dont export a stream
+const stream = new Sse();
+const roomFactory = require("./room/router");
+const roomRouter = roomFactory(stream);
+app.use(roomRouter);
+
+app.get("/stream", (req, res) => {
+  stream.init(req, res);
+});
+
 const userRouter = require("./user/router");
 app.use(userRouter);
 
