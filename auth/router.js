@@ -51,10 +51,11 @@ router.post("/login", (req, res, next) => {
 });
 
 //Secret-endpoint for login test
-// router.get("/secret-endpoint", auth, (req, res) => {
-//   res.send({
-//     message: `Thanks for visiting the secret endpoint ${req.user.email}.`
-//   });
-// });
+// to test: http :4000/secret-endpoint "Authorization":"Bearer <jwt-token>"
+router.get("/secret-endpoint", auth, (req, res) => {
+  res.send({
+    message: `Thanks for visiting the secret endpoint.`
+  });
+});
 
 module.exports = router;
