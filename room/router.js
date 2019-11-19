@@ -58,6 +58,16 @@ function roomFactory(stream) {
 
     const updated = await user.update({roomId: room.id})
     
+    const rooms = await Room.findAll({include:[User]})
+    
+    const action = {
+      type: "ROOMS",
+      payload: rooms
+    }
+
+    const string = JSON.stringify(action);
+    stream.send(string)
+
     res.send(updated)
     })
 
