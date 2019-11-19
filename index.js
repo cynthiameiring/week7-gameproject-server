@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const Room = require('./room/model')
+const User = require("./user/model")
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -15,15 +17,30 @@ const Sse = require("json-sse");
 
 //make only a stream ONE time, and dont export a stream
 const stream = new Sse();
-const { roomFactory, routerFetchRoom, joinRouter } = require("./room/router");
-const roomRouter = roomFactory(stream);
-app.use(roomRouter);
-app.use(routerFetchRoom);
-app.use(joinRouter);
+const {roomFactory} = require("./room/router");
 
-app.get("/stream", (req, res) => {
+app.get("/stream", async(req, res) => {
+  console.log('req test:', req)
+  const rooms = await Room.findAll({
+    include: [User]
+  })
+
+  const action = {
+    type: 'ROOMS',
+    payload: rooms
+  }
+
+  const string = JSON.stringify(action)
+
+  console.log('string test:', string)
+
+  stream.updateInit(string)
+  
   stream.init(req, res);
 });
+
+const roomRouter = roomFactory(stream);
+app.use(roomRouter);
 
 const userRouter = require("./user/router");
 app.use(userRouter);

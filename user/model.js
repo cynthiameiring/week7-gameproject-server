@@ -21,5 +21,9 @@ const User = sequelize.define(
 );
 
 User.belongsTo(Room);
+// to also make a user.id column in the Room table
+// and to use the inclusion option in findAll
+Room.hasMany(User)
+
 
 module.exports = User;
