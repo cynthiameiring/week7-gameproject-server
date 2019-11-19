@@ -4,6 +4,7 @@ const router = new Router();
 const bcrypt = require("bcrypt");
 
 router.post("/signup", (req, res, next) => {
+  console.log("route test");
   if (!req.body.email || !req.body.password) {
     res.status(400).end("Email or password not provided");
   }

@@ -23,4 +23,11 @@ routerFetchRoom.get("/", (req, res, next) => {
     .catch(next);
 });
 
+const joinRouter = new Room();
+
+joinRouter.put("/join/:id", (req, res, next) => {
+  User.findByPk(req) // get userid from Redux state
+    .then(user => user.update({ roomId: req.params.id }));
+});
+
 module.exports = { roomFactory, routerFetchRoom };
