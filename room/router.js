@@ -1,5 +1,6 @@
 //const express = require("express");
 const Room = require("./model");
+const User = require('../user/model')
 const { Router } = require("express");
 
 function roomFactory(stream) {
@@ -23,11 +24,33 @@ routerFetchRoom.get("/", (req, res, next) => {
     .catch(next);
 });
 
-const joinRouter = new Room();
+const joinRouter = new Router();
 
-joinRouter.put("/join/:id", (req, res, next) => {
+/* joinRouter.put("/join/:id", (req, res, next) => {
   User.findByPk(req) // get userid from Redux state
-    .then(user => user.update({ roomId: req.params.id }));
-});
+    .then(console.log('req', req))
+    .then(console.log('req.params.id', req.params.id))
+    .then(user => user.update({ roomId: req.params.id }))
+    .then(user => res.status(200).json(user));
+}); */
 
-module.exports = { roomFactory, routerFetchRoom };
+//For testing
+joinRouter.put("/join/:id", (req, res, next) => {
+  const roomId = req.params.id
+  console.log('req.params.id',roomId)
+  console.log('req.body', req.body)
+  User
+    .findByPk(req.body.userId) 
+    .then(user => {
+      if(!user){
+        res.status(404).end()
+      }else{
+        user
+          .update({roomId: roomId})
+          .then(user => res.status(200).json(user))
+      }
+    })
+    .catch(next)
+  })
+
+module.exports = { roomFactory, routerFetchRoom, joinRouter }

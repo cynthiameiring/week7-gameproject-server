@@ -15,10 +15,11 @@ const Sse = require("json-sse");
 
 //make only a stream ONE time, and dont export a stream
 const stream = new Sse();
-const { roomFactory, routerFetchRoom } = require("./room/router");
+const { roomFactory, routerFetchRoom, joinRouter } = require("./room/router");
 const roomRouter = roomFactory(stream);
 app.use(roomRouter);
 app.use(routerFetchRoom);
+app.use(joinRouter);
 
 app.get("/stream", (req, res) => {
   stream.init(req, res);
