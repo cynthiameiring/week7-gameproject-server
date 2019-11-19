@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const Room = require('./room/model')
+const User = require("./user/model")
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -20,7 +21,9 @@ const {roomFactory} = require("./room/router");
 
 app.get("/stream", async(req, res) => {
   console.log('req test:', req)
-  const rooms = await Room.findAll()
+  const rooms = await Room.findAll({
+    include: [User]
+  })
 
   const action = {
     type: 'ROOMS',

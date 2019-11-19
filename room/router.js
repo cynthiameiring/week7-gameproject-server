@@ -2,6 +2,7 @@ const express = require("express");
 const Room = require("./model");
 const User = require('../user/model')
 const { Router } = express;
+const auth = require('../auth/middleware')
 
 function roomFactory(stream) {
   const router = new Router();
@@ -37,23 +38,46 @@ function roomFactory(stream) {
       .catch(next);
   }); */
 
-  router.put("/join/:id", (req, res, next) => {
-    const roomId = req.params.id
-    console.log('req.params.id',roomId)
-    console.log('req.body', req.body)
-    User
-      .findByPk(req.body.userId) 
-      .then(user => {
-        if(!user){
-          res.status(404).end()
-        }else{
-          user
-            .update({roomId: roomId})
-            .then(user => res.status(200).json(user))
-        }
-      })
-      .catch(next)
+  router.put("/join/:name", auth, async(req, res, next) => {
+    // const userId = 1
+
+    // const user = await User.findByPk(userId)
+
+    // console.log('user test', user)
+    const {user} = req
+
+    if (!user){
+      return next('No user found')
+    }
+
+    const {name} = req.params
+
+    const room = await Room.findOne(
+      {where: {name}}
+    )
+
+    const updated = await user.update({roomId: room.id})
+    
+    res.send(updated)
     })
+
+  // router.put("/join/:id", (req, res, next) => {
+  //   const roomId = req.params.id
+  //   console.log('req.params.id',roomId)
+  //   console.log('req.body', req.body)
+  //   User
+  //     .findByPk(req.body.userId) 
+  //     .then(user => {
+  //       if(!user){
+  //         res.status(404).end()
+  //       }else{
+  //         user
+  //           .update({roomId: roomId})
+  //           .then(user => res.status(200).json(user))
+  //       }
+  //     })
+  //     .catch(next)
+  //   })
     
  
   return router;
