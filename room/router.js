@@ -54,7 +54,7 @@ function roomFactory(stream) {
     res.send(updated)
   })
 
-  // Click card and get point
+  // Click card and get point in database
   router.put("/card", auth, async(req, res, next) => {
 
     const {user} = req
