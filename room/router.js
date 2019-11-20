@@ -24,26 +24,9 @@ function roomFactory(stream) {
 
   })
 
-  /* router.post("/room", (req, res) => {
-    Room.create(req.body).then(room => {
-      const data = JSON.stringify(room);
-      stream.send(data);
-      res.send(room);
-    });
-  }); */
-
-  /* router.get("/", (req, res, next) => {
-    Room.findAll()
-      .then(room => res.json(room))
-      .catch(next);
-  }); */
 
   router.put("/join/:name", auth, async(req, res, next) => {
-    // const userId = 1
 
-    // const user = await User.findByPk(userId)
-
-    // console.log('user test', user)
     const {user} = req
 
     if (!user){
@@ -69,65 +52,34 @@ function roomFactory(stream) {
     stream.send(string)
 
     res.send(updated)
-    })
+  })
 
-  // router.put("/join/:id", (req, res, next) => {
-  //   const roomId = req.params.id
-  //   console.log('req.params.id',roomId)
-  //   console.log('req.body', req.body)
-  //   User
-  //     .findByPk(req.body.userId) 
-  //     .then(user => {
-  //       if(!user){
-  //         res.status(404).end()
-  //       }else{
-  //         user
-  //           .update({roomId: roomId})
-  //           .then(user => res.status(200).json(user))
-  //       }
-  //     })
-  //     .catch(next)
-  //   })
+  // Click card and get point
+  router.put("/card", auth, async(req, res, next) => {
+
+    const {user} = req
+
+    if (!user){
+      return next('No user found')
+    }
+
+    const updated = await user.update({point: 1})
+    
+    const action = {
+      type: "CLICKCARD",
+      payload: user
+    }
+
+    const string = JSON.stringify(action);
+    stream.send(string)
+
+    res.send(updated)
+  })
+  
     
  
   return router;
 }
 
-/* const routerFetchRoom = new Router();
-
-routerFetchRoom.get("/", (req, res, next) => {
-  Room.findAll()
-    .then(room => res.json(room))
-    .catch(next);
-});
-
-const joinRouter = new Router(); */
-
-/* joinRouter.put("/join/:id", (req, res, next) => {
-  User.findByPk(req) // get userid from Redux state
-    .then(console.log('req', req))
-    .then(console.log('req.params.id', req.params.id))
-    .then(user => user.update({ roomId: req.params.id }))
-    .then(user => res.status(200).json(user));
-}); */
-
-//For testing
-/* joinRouter.put("/join/:id", (req, res, next) => {
-  const roomId = req.params.id
-  console.log('req.params.id',roomId)
-  console.log('req.body', req.body)
-  User
-    .findByPk(req.body.userId) 
-    .then(user => {
-      if(!user){
-        res.status(404).end()
-      }else{
-        user
-          .update({roomId: roomId})
-          .then(user => res.status(200).json(user))
-      }
-    })
-    .catch(next)
-  }) */
 
 module.exports = { roomFactory }
