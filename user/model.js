@@ -15,7 +15,8 @@ const User = sequelize.define(
       allowNull: false
     },
     point: {
-      type: Sequelize.INTEGER
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
     }
   },
   {

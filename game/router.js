@@ -1,6 +1,8 @@
 const express = require("express");
 const { Router } = express;
 const auth = require('../auth/middleware')
+const User = require('../user/model')
+const Room = require("../room/model");
 
 function gameFactory(stream) {
     const router = new Router();
@@ -15,11 +17,16 @@ function gameFactory(stream) {
     }
 
     const updated = await user.update({point: 1})
-    
+
+    const users = await User.findAll()
+    const rooms = await Room.findAll({include: [User]})
+
     const action = {
-      type: "CLICKCARD",
-      payload: user
+      type: "ROOMS",
+      payload: rooms
     }
+
+    console.log({ action });
 
     const string = JSON.stringify(action);
     stream.send(string)
