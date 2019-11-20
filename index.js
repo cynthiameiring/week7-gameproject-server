@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
-const Room = require('./room/model')
-const User = require("./user/model")
+const Room = require("./room/model");
+const User = require("./user/model");
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -17,25 +17,25 @@ const Sse = require("json-sse");
 
 //make only a stream ONE time, and dont export a stream
 const stream = new Sse();
-const {roomFactory} = require("./room/router");
+const { roomFactory } = require("./room/router");
 
-app.get("/stream", async(req, res) => {
-  console.log('req test:', req)
+app.get("/stream", async (req, res) => {
+  //console.log('req test:', req)
   const rooms = await Room.findAll({
     include: [User]
-  })
+  });
 
   const action = {
-    type: 'ROOMS',
+    type: "ROOMS",
     payload: rooms
-  }
+  };
 
-  const string = JSON.stringify(action)
+  const string = JSON.stringify(action);
 
-  console.log('string test:', string)
+  console.log("string test:", string);
 
-  stream.updateInit(string)
-  
+  stream.updateInit(string);
+
   stream.init(req, res);
 });
 
