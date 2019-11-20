@@ -17,7 +17,10 @@ const Sse = require("json-sse");
 
 //make only a stream ONE time, and dont export a stream
 const stream = new Sse();
-const { roomFactory } = require("./room/router");
+
+const {roomFactory} = require("./room/router");
+const {gameFactory} = require('./game/router')
+
 
 app.get("/stream", async (req, res) => {
   //console.log('req test:', req)
@@ -41,6 +44,9 @@ app.get("/stream", async (req, res) => {
 
 const roomRouter = roomFactory(stream);
 app.use(roomRouter);
+
+const gameRouter = gameFactory(stream)
+app.use(gameRouter)
 
 const userRouter = require("./user/router");
 app.use(userRouter);
