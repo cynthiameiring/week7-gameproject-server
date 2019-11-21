@@ -8,7 +8,10 @@ const Card = sequelize.define(
     present: {
       type: Sequelize.BOOLEAN,
       defaultValue: true,
-    }
+    },
+    alt: {
+        type: Sequelize.STRING,
+      }
   },
   {
     tableName: "cards"
@@ -25,12 +28,12 @@ Card
     .then((res) => {
         console.log('res.count test:', res.count)
         if(res.count !== 6){
-            Card.create({})
-            Card.create({})
-            Card.create({})
-            Card.create({})
-            Card.create({})
-            Card.create({})
+            Card.create({alt: 'dog'})
+            Card.create({alt: 'dog'})
+            Card.create({alt: 'cat'})
+            Card.create({alt: 'cat'})
+            Card.create({alt: 'duck'})
+            Card.create({alt: 'duck'})
         }
     })
 

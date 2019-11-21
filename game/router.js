@@ -18,18 +18,36 @@ function gameFactory(stream) {
 
   // update present value to database
   router.put('/remove', (req, res)=>{
-    // req is the card id
+    console.log('WHAT IT REQ.BODY?', req.body)
     Card
-      .findByPk(2)
+      .update({present:false},{where: {alt: req.body.alt}})
+      .then(_ => res.status(200))
+    // Should check by alt
+    /* const SecondCardId = req.body.cardId
+    const FirstCardId = (SecondCardId - 1)  */
+    // req is the card id
+   /*  Card
+      .findByPk(SecondCardId)
       .then(card => {
         if(!card){
           res.status(404).end()
         }else{
           card
-            .update(req.body)
+            .update({present: false})
             .then(card => res.status(200).json(card))
         }
-      })
+      }) */
+      /* Card
+      .findByPk(FirstCardId)
+      .then(card => {
+        if(!card){
+          res.status(404).end()
+        }else{
+          card
+            .update({present: false})
+            .then(card => res.status(200).json(card))
+        }
+      }) */
   })
 
 
