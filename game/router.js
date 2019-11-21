@@ -7,7 +7,7 @@ const Room = require("../room/model");
 function gameFactory(stream) {
     const router = new Router();
 
-  // Click card and get point in database
+  // Click on button and increment 1 point in database
   router.put("/card", auth, async(req, res, next) => {
 
     const {user} = req
@@ -16,9 +16,16 @@ function gameFactory(stream) {
       return next('No user found')
     }
 
-    const updated = await user.update({point: 1})
+    console.log('user', user)
+    console.log('user.point', user.point)
+    let Point = user.point
+    console.log('Is point a number? ', Point)
+    let NewPoint = Point +1
+    console.log('new point', NewPoint)
+    const updated = await user.update({
+      point: NewPoint
+    })
 
-    const users = await User.findAll()
     const rooms = await Room.findAll({include: [User]})
 
     const action = {
