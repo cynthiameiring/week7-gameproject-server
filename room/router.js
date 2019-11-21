@@ -1,6 +1,7 @@
 const express = require("express");
 const Room = require("./model");
 const User = require('../user/model')
+const Card = require('../game/model')
 const { Router } = express;
 const auth = require('../auth/middleware')
 
@@ -41,7 +42,7 @@ function roomFactory(stream) {
 
     const updated = await user.update({roomId: room.id})
     
-    const rooms = await Room.findAll({include:[User]})
+    const rooms = await Room.findAll({include:[User, Card]})
     
     const action = {
       type: "ROOMS",

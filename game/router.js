@@ -16,42 +16,34 @@ function gameFactory(stream) {
       .then(_ => res.status(200))
   })
 
-  // update present value to database
-  router.put('/remove', (req, res)=>{
-    console.log('WHAT IT REQ.BODY?', req.body)
+  // reset present value to true
+  router.put('/resetpresent', (req, res)=>{
+    let ids = [1,2,3,4,5,6]
     Card
-      .update({present:false},{where: {alt: req.body.alt}})
-      .then(_ => res.status(200))
-    // Should check by alt
-    /* const SecondCardId = req.body.cardId
-    const FirstCardId = (SecondCardId - 1)  */
-    // req is the card id
-   /*  Card
-      .findByPk(SecondCardId)
-      .then(card => {
-        if(!card){
-          res.status(404).end()
-        }else{
-          card
-            .update({present: false})
-            .then(card => res.status(200).json(card))
-        }
-      }) */
-      /* Card
-      .findByPk(FirstCardId)
-      .then(card => {
-        if(!card){
-          res.status(404).end()
-        }else{
-          card
-            .update({present: false})
-            .then(card => res.status(200).json(card))
-        }
-      }) */
+      .update({present: true}, {where: {id: ids}})
+      .then(_=>res.status(200))
   })
 
+  // update present value to database
+  router.put('/remove', async(req, res)=>{
+    console.log('WHAT IT REQ.BODY?', req.body)
+    const updated = await Card
+      .update({present:false},{where: {alt: req.body.alt}})
+      .then(_ => res.status(200))
 
-  // Click on button and increment 1 point in database
+    const rooms = await Room.findAll({include:[User, Card]})
+
+    const action = {
+      type: 'ROOMS',
+      payload: rooms
+    }
+
+    const string = JSON.stringify(action);
+    stream.send(string)
+    res.send(updated)
+  })
+
+  // Increment 1 point in database
   router.put("/getonepoint", auth, async(req, res, next) => {
 
     const {user} = req
@@ -70,7 +62,7 @@ function gameFactory(stream) {
       point: NewPoint
     })
 
-    const rooms = await Room.findAll({include: [User]})
+    const rooms = await Room.findAll({include: [User, Card]})
 
     const action = {
       type: "ROOMS",
