@@ -12,17 +12,21 @@ function gameFactory(stream) {
   router.put('/getroomid', (req, res)=>{
     let ids = [1,2,3,4,5,6]
     Card
-      .update(req.body, {where: {id: ids}})
+      .update({
+        present: true,
+        roomId: req.body.roomId
+      }, {where: {id: ids}})
+      //.update({present: true}, {where: {id: ids}})
       .then(_ => res.status(200))
   })
 
   // reset present value to true
-  router.put('/resetpresent', (req, res)=>{
+  /* router.put('/resetpresent', (req, res)=>{
     let ids = [1,2,3,4,5,6]
     Card
       .update({present: true}, {where: {id: ids}})
       .then(_=>res.status(200))
-  })
+  }) */
 
   // update present value to database
   router.put('/remove', async(req, res)=>{
