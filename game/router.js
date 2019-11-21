@@ -3,12 +3,52 @@ const { Router } = express;
 const auth = require('../auth/middleware')
 const User = require('../user/model')
 const Room = require("../room/model");
+const Card = require('./model')
 
 function gameFactory(stream) {
-    const router = new Router();
+  const router = new Router();
 
-  // Click on button and increment 1 point in database
-  router.put("/card", auth, async(req, res, next) => {
+  // update roomId in card table
+  router.put('/getroomid', (req, res)=>{
+    let ids = [1,2,3,4,5,6]
+    Card
+      .update({
+        present: true,
+        roomId: req.body.roomId
+      }, {where: {id: ids}})
+      //.update({present: true}, {where: {id: ids}})
+      .then(_ => res.status(200))
+  })
+
+  // reset present value to true
+  /* router.put('/resetpresent', (req, res)=>{
+    let ids = [1,2,3,4,5,6]
+    Card
+      .update({present: true}, {where: {id: ids}})
+      .then(_=>res.status(200))
+  }) */
+
+  // update present value to database
+  router.put('/remove', async(req, res)=>{
+    console.log('WHAT IT REQ.BODY?', req.body)
+    const updated = await Card
+      .update({present:false},{where: {alt: req.body.alt}})
+      .then(_ => res.status(200))
+
+    const rooms = await Room.findAll({include:[User, Card]})
+
+    const action = {
+      type: 'ROOMS',
+      payload: rooms
+    }
+
+    const string = JSON.stringify(action);
+    stream.send(string)
+    res.send(updated)
+  })
+
+  // Increment 1 point in database
+  router.put("/getonepoint", auth, async(req, res, next) => {
 
     const {user} = req
 
@@ -26,7 +66,7 @@ function gameFactory(stream) {
       point: NewPoint
     })
 
-    const rooms = await Room.findAll({include: [User]})
+    const rooms = await Room.findAll({include: [User, Card]})
 
     const action = {
       type: "ROOMS",
