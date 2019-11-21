@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const Room = require("./room/model");
 const User = require("./user/model");
+const Card = require('./game/model')
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -53,5 +54,7 @@ app.use(userRouter);
 
 const authRouter = require("./auth/router");
 app.use(authRouter);
+
+app.use(Card)
 
 app.listen(port, () => console.log(`listening on port ${port}`));
