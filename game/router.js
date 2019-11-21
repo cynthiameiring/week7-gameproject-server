@@ -8,6 +8,12 @@ const Card = require('./model')
 function gameFactory(stream) {
   const router = new Router();
 
+  router.get('/cards', (req, res)=>{
+    Card
+      .findAll({where: {roomId: req.query.roomId}})
+      .then(cards => res.send(cards))
+  })
+
   // update present value to database
   router.put('/remove', async(req, res)=>{
     console.log('WHAT IT REQ.BODY?', req.body)
