@@ -18,7 +18,9 @@ function gameFactory(stream) {
   router.put('/remove', async(req, res)=>{
     console.log('WHAT IT REQ.BODY?', req.body)
     const updated = await Card
-      .update({present:false},{where: {alt: req.body.alt}})
+      .update({present:false},{where: 
+        {alt: req.body.alt, roomId: req.body.roomId}
+      })
       .then(_ => res.status(200))
 
     const rooms = await Room.findAll({include:[User, Card]})
