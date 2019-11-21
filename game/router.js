@@ -8,12 +8,19 @@ const Card = require('./model')
 function gameFactory(stream) {
   const router = new Router();
 
+  // update roomId in card table
+  router.put('/getroomid', (req, res)=>{
+    let ids = [1,2,3,4,5,6]
+    Card
+      .update(req.body, {where: {id: ids}})
+      .then(_ => res.status(200))
+  })
 
   // update present value to database
   router.put('/remove', (req, res)=>{
     // req is the card id
     Card
-      .findByPk(1)
+      .findByPk(2)
       .then(card => {
         if(!card){
           res.status(404).end()
