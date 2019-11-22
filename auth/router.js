@@ -7,17 +7,17 @@ const auth = require("./middleware");
 const bcrypt = require("bcrypt");
 
 router.post("/login", (req, res, next) => {
-  const email = req.body.email;
+  const username = req.body.username;
   const password = req.body.password;
-  if (!email || !password) {
+  if (!username || !password) {
     return res.status(400).send({
-      message: "Please supply a valid email and password"
+      message: "Please supply a valid username and password"
     });
   } else {
-    // 1. find user based on email address
+    // 1. find user based on username address
     User.findOne({
       where: {
-        email: req.body.email
+        username: req.body.username
       }
     })
       .then(entity => {
@@ -26,7 +26,7 @@ router.post("/login", (req, res, next) => {
 
         if (!entity) {
           res.status(400).send({
-            message: "User with that email does not exist"
+            message: "User with that username does not exist"
           });
         }
         // 2. use bcrypt.compareSync to check the password against the stored hash

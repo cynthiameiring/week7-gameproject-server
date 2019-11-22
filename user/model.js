@@ -5,7 +5,7 @@ const Room = require("../room/model");
 const User = sequelize.define(
   "user",
   {
-    email: {
+    username: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: true
