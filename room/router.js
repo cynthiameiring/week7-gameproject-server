@@ -8,38 +8,41 @@ const auth = require("../auth/middleware");
 function roomFactory(stream) {
   const router = new Router();
 
-  router.post("/room", async (req, res) => {
-    const room = await Room.create(req.body);
+  router.post("/room", async (req, res, next) => {
+    try {
+      const room = await Room.create(req.body);
 
+      await Card.create({ alt: "dog", roomId: room.id });
+      await Card.create({ alt: "dog", roomId: room.id });
+      await Card.create({ alt: "cat", roomId: room.id });
+      await Card.create({ alt: "sun", roomId: room.id });
+      await Card.create({ alt: "duck", roomId: room.id });
+      await Card.create({ alt: "cat", roomId: room.id });
+      await Card.create({ alt: "pig", roomId: room.id });
+      await Card.create({ alt: "bird", roomId: room.id });
+      await Card.create({ alt: "fish", roomId: room.id });
+      await Card.create({ alt: "bird", roomId: room.id });
+      await Card.create({ alt: "pig", roomId: room.id });
+      await Card.create({ alt: "fish", roomId: room.id });
+      await Card.create({ alt: "sun", roomId: room.id });
+      await Card.create({ alt: "duck", roomId: room.id });
+      await Card.create({ alt: "moon", roomId: room.id });
+      await Card.create({ alt: "moon", roomId: room.id });
 
-    Card.create({alt: 'dog', roomId: room.id})
-    Card.create({alt: 'dog', roomId: room.id})
-    Card.create({alt: 'cat', roomId: room.id})
-    Card.create({alt: 'sun', roomId: room.id})
-    Card.create({alt: 'duck', roomId: room.id})
-    Card.create({alt: 'cat', roomId: room.id})
-    Card.create({alt: 'pig', roomId: room.id})
-    Card.create({alt: 'bird', roomId: room.id})
-    Card.create({alt: 'fish', roomId: room.id})
-    Card.create({alt: 'bird', roomId: room.id})
-    Card.create({alt: 'pig', roomId: room.id})
-    Card.create({alt: 'fish', roomId: room.id})
-    Card.create({alt: 'sun', roomId: room.id})
-    Card.create({alt: 'duck', roomId: room.id})
-    Card.create({alt: 'moon', roomId: room.id})
-    Card.create({alt: 'moon', roomId: room.id})
+      const action = {
+        type: "ADDROOM",
+        payload: room
+      };
 
-    const action = {
-      type: "ADDROOM",
-      payload: room
-    };
+      const string = JSON.stringify(action);
 
-    const string = JSON.stringify(action);
+      stream.send(string);
 
-    stream.send(string);
-
-    // For testing
-    res.send(room);
+      // For testing
+      res.send(room);
+    } catch (error) {
+      next(error);
+    }
   });
 
   router.put("/join/:name", auth, async (req, res, next) => {
