@@ -7,7 +7,7 @@ const db = new Sequelize(databaseUrl);
 
 db.sync({ force: true })
   .then(() => {
-    console.log("Tables created successfully");
+    console.log("Tables created successfully!");
   })
   .catch(err => console.error("Unable to create tables", err));
 
