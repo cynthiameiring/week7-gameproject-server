@@ -11,6 +11,16 @@ function roomFactory(stream) {
   router.post('/room', async(req, res)=>{
     const room = await Room.create(req.body)
     
+
+    // When create an new room, create 6 cards
+    Card.create({alt: 'dog', roomId: room.id})
+    Card.create({alt: 'dog', roomId: room.id})
+    Card.create({alt: 'cat', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
+    Card.create({alt: 'cat', roomId: room.id})
+        
+    
     const action = {
       type: 'ADDROOM',
       payload: room
@@ -39,6 +49,7 @@ function roomFactory(stream) {
     const room = await Room.findOne(
       {where: {name}}
     )
+
 
     const updated = await user.update({roomId: room.id})
     

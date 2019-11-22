@@ -8,31 +8,19 @@ const Card = require('./model')
 function gameFactory(stream) {
   const router = new Router();
 
-  // update roomId in card table
-  router.put('/getroomid', (req, res)=>{
-    let ids = [1,2,3,4,5,6]
+  router.get('/cards', (req, res)=>{
     Card
-      .update({
-        present: true,
-        roomId: req.body.roomId
-      }, {where: {id: ids}})
-      //.update({present: true}, {where: {id: ids}})
-      .then(_ => res.status(200))
+      .findAll({where: {roomId: req.query.roomId}})
+      .then(cards => res.send(cards))
   })
-
-  // reset present value to true
-  /* router.put('/resetpresent', (req, res)=>{
-    let ids = [1,2,3,4,5,6]
-    Card
-      .update({present: true}, {where: {id: ids}})
-      .then(_=>res.status(200))
-  }) */
 
   // update present value to database
   router.put('/remove', async(req, res)=>{
     console.log('WHAT IT REQ.BODY?', req.body)
     const updated = await Card
-      .update({present:false},{where: {alt: req.body.alt}})
+      .update({present:false},{where: 
+        {alt: req.body.alt, roomId: req.body.roomId}
+      })
       .then(_ => res.status(200))
 
     const rooms = await Room.findAll({include:[User, Card]})
