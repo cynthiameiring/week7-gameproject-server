@@ -16,9 +16,9 @@ function roomFactory(stream) {
     Card.create({alt: 'dog', roomId: room.id})
     Card.create({alt: 'dog', roomId: room.id})
     Card.create({alt: 'cat', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
     Card.create({alt: 'cat', roomId: room.id})
-    Card.create({alt: 'duck', roomId: room.id})
-    Card.create({alt: 'duck', roomId: room.id})
         
     
     const action = {
