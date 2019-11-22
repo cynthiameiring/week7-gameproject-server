@@ -35,7 +35,7 @@ app.get("/stream", async (req, res) => {
 
   const string = JSON.stringify(action);
 
-  console.log("string test:", string);
+  //console.log("string test:", string);
 
   stream.updateInit(string);
 
