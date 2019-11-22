@@ -5,11 +5,11 @@ const bcrypt = require("bcrypt");
 
 router.post("/signup", (req, res, next) => {
   console.log("route test");
-  if (!req.body.email || !req.body.password) {
-    res.status(400).end("Email or password not provided");
+  if (!req.body.username || !req.body.password) {
+    res.status(400).end("username or password not provided");
   }
   const user = {
-    email: req.body.email,
+    username: req.body.username,
     password: bcrypt.hashSync(req.body.password, 10)
   };
   User.create(user)

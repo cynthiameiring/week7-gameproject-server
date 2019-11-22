@@ -11,13 +11,23 @@ function roomFactory(stream) {
   router.post("/room", async (req, res) => {
     const room = await Room.create(req.body);
 
-    // When create an new room, create 6 cards
-    Card.create({ alt: "dog", roomId: room.id });
-    Card.create({ alt: "dog", roomId: room.id });
-    Card.create({ alt: "cat", roomId: room.id });
-    Card.create({ alt: "duck", roomId: room.id });
-    Card.create({ alt: "duck", roomId: room.id });
-    Card.create({ alt: "cat", roomId: room.id });
+
+    Card.create({alt: 'dog', roomId: room.id})
+    Card.create({alt: 'dog', roomId: room.id})
+    Card.create({alt: 'cat', roomId: room.id})
+    Card.create({alt: 'sun', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
+    Card.create({alt: 'cat', roomId: room.id})
+    Card.create({alt: 'pig', roomId: room.id})
+    Card.create({alt: 'bird', roomId: room.id})
+    Card.create({alt: 'fish', roomId: room.id})
+    Card.create({alt: 'bird', roomId: room.id})
+    Card.create({alt: 'pig', roomId: room.id})
+    Card.create({alt: 'fish', roomId: room.id})
+    Card.create({alt: 'sun', roomId: room.id})
+    Card.create({alt: 'duck', roomId: room.id})
+    Card.create({alt: 'moon', roomId: room.id})
+    Card.create({alt: 'moon', roomId: room.id})
 
     const action = {
       type: "ADDROOM",
