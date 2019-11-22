@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const Room = require("./room/model");
 const User = require("./user/model");
-const Card = require('./game/model')
+const Card = require("./game/model");
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
@@ -19,9 +19,8 @@ const Sse = require("json-sse");
 //make only a stream ONE time, and dont export a stream
 const stream = new Sse();
 
-const {roomFactory} = require("./room/router");
-const {gameFactory} = require('./game/router')
-
+const { roomFactory } = require("./room/router");
+const { gameFactory } = require("./game/router");
 
 app.get("/stream", async (req, res) => {
   //console.log('req test:', req)
@@ -46,8 +45,8 @@ app.get("/stream", async (req, res) => {
 const roomRouter = roomFactory(stream);
 app.use(roomRouter);
 
-const gameRouter = gameFactory(stream)
-app.use(gameRouter)
+const gameRouter = gameFactory(stream);
+app.use(gameRouter);
 
 const userRouter = require("./user/router");
 app.use(userRouter);
@@ -55,6 +54,6 @@ app.use(userRouter);
 const authRouter = require("./auth/router");
 app.use(authRouter);
 
-app.use(Card)
+app.use(Card);
 
 app.listen(port, () => console.log(`listening on port ${port}`));
